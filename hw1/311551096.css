@@ -1,0 +1,27 @@
+/* styles.css */
+.container {
+    text-align: center;
+    padding: 20px;
+    font-size: 25px;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+.title {
+    text-align: center;
+    font-size: 50px;
+}
+
+.ID {
+    text-align: center;
+    font-size: 30px;
+}
+
+select {
+    font-size: 1.5rem;
+    padding: 2px 5px;
+  }
+
+/* Define styles as needed for your scatter plot */

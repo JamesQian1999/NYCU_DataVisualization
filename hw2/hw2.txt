@@ -1,0 +1,37 @@
+Parallel Coordinate Plots
+Dear all,
+
+In this homework, your goal is to implement a web-based parallel coordinate plot to show the iris dataset (the same as your homework #1) using D3. Users should be able to change the order of the axis because the attribute relations are difficult to observe if they are far away. Besides, please render poly-lines (flower samples) in different hues to represent the flower classes (three in total). In this case, the attribute relations of different flowers can be further visualized.
+
+Please let me know if there are any questions.
+
+PS1: If you don't know what parallel coordinates are, please watch this video https://www.youtube.com/watch?v=2B6uz0H7BSo
+
+PS2: Name your page by "your_student_ID.html" or "your_student_ID.js" and upload them to the server we provide. The links for uploading your homework will be announced soon. Note that you also have to upload your homework to E3.
+
+YuShuen
+
+============================================================================
+
+UPDATE 2023.09.15
+
+Here comes the links for uploading your homework.
+
+Website:  http://vis.lab.djosix.com:2023/
+
+There are three important things:
+
+1. VPN or NYCU Internet is required to connect to this website.  
+
+(NYCU VPN : https://it.nycu.edu.tw/it-services/networks/ssl-vpn/)
+
+2. Before upload to website, Change the dataset link to the following one:  http://vis.lab.djosix.com:2023/data/iris.csv
+
+3. Please make sure your code runs correctly on this website, and remember your website url ( it will like http://*.vis.lab.djosix.com:2023/ )
+
+By the way, note that you also have to upload your homework to E3.
+
+
+
+TA  KuanYan
+
