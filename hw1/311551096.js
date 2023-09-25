@@ -226,12 +226,10 @@
       });
     };
   
-    // function removeNaN(e,c){
-    //     if(isNaN(x)){return e}else{return c}
 
     function removeNaN(data,length){
       for (var i = 0; i < length; i++) {
-        if(isNaN(data[i]['sepal length']) || isNaN(data[i]['sepal width']) || isNaN(data[i]['petal length']) || isNaN(data[i]['petal width']))
+        if( (!data[i]['sepal length']) || isNaN(data[i]['sepal length']) || isNaN(data[i]['sepal width']) || isNaN(data[i]['petal length']) || isNaN(data[i]['petal width']))
         {
           delete data[i];
           data.length -= 1;
