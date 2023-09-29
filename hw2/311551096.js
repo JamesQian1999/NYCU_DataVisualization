@@ -210,7 +210,7 @@ function removeNaN(data,length){
     return data;
 }
 
-d3.csv("iris.csv").then( function(data) {
+d3.csv("http://vis.lab.djosix.com:2023/data/iris.csv").then( function(data) {
     dimensions = ["sepal length", "sepal width", "petal length", "petal width"];
     console.log('First',dimensions);
     DATA = removeNaN(data, data.length);
