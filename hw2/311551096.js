@@ -185,7 +185,7 @@ const dropdownMenu = (selection, props) => {
 // Parse the Data
 d3.csv("iris.csv").then( function(data) {
   // Color scale: give me a specie name, I return a color
-    let dimensions = ["sepal length", "sepal width", "petal length", "petal width"];
+    dimensions = ["sepal length", "sepal width", "petal length", "petal width"];
     console.log('First',dimensions)
     DATA = data
     render(dimensions);
