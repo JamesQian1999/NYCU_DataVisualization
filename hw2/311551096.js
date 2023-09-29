@@ -35,7 +35,7 @@ const dropdownMenu = (selection, props) => {
         .text(d => d)
     };
 
-
+    let DATA;
     let yColumn1, yColumn2, yColumn3, yColumn4;
     let dimensions = ["sepal length", "sepal width", "petal length", "petal width"];
     const onYColumnClicked1 = column => {
@@ -188,6 +188,6 @@ d3.csv("iris.csv").then( function(data) {
     let dimensions = ["sepal length", "sepal width", "petal length", "petal width"];
     console.log('First',dimensions)
     DATA = data
-    render(data, dimensions);
+    render(DATA, dimensions);
 
 })
