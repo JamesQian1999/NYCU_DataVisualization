@@ -1,8 +1,8 @@
 
 // set the dimensions and margins of the graph
 const margin = {top: 20, right: 30, bottom: 80, left: 30},
-  width = 960 - margin.left - margin.right,
-  height = 1000 - margin.top - margin.bottom;
+  width = 910 - margin.left - margin.right,
+  height = 950 - margin.top - margin.bottom;
 // append the svg object to the body of the page
 const svg = d3.select("#container")
 .append("svg")
@@ -11,6 +11,94 @@ const svg = d3.select("#container")
 .append("g")
   .attr("transform",
         `translate(${margin.left},${margin.top})`);
+
+const dropdownMenu = (selection, props) => {
+    const {
+        options,
+        onOptionClicked,
+        selectedOption
+    } = props;
+    
+    let select = selection.selectAll('select').data([null]);
+    select = select.enter().append('select')
+        .merge(select)
+        .on('change', function() {
+            onOptionClicked(this.value);
+        });
+    
+    const option = select.selectAll('option').data(options);
+    option.enter().append('option')
+        .merge(option)
+        .attr('value', d => d)
+        .style("background", "#edf2ff")
+        .property('selected', d => d === selectedOption)
+        .text(d => d)
+    };
+
+
+    let yColumn1, yColumn2, yColumn3, yColumn4;
+    const onYColumnClicked1 = column => {
+    yColumn1 = column;
+    render();
+    };
+    const onYColumnClicked2 = column => {
+    yColumn2 = column;
+    render();
+    };
+    const onYColumnClicked3 = column => {
+    yColumn3 = column;
+    render();
+    };
+    const onYColumnClicked4 = column => {
+    yColumn4 = column;
+    render();
+    };
+
+
+
+    const render = () => {
+        
+    d3.select('#menu1')
+        .call(dropdownMenu, {
+        options: ['sepal length',
+                    'sepal width',
+                    'petal length',
+                    'petal width'],
+        onOptionClicked: onYColumnClicked1,
+        selectedOption: yColumn1
+        });
+    
+    d3.select('#menu2')
+        .call(dropdownMenu, {
+        options: ['sepal width',
+                    'sepal length',
+                    'petal length',
+                    'petal width'],
+        onOptionClicked: onYColumnClicked2,
+        selectedOption: yColumn2
+        });
+
+        d3.select('#menu3')
+        .call(dropdownMenu, {
+        options: ['petal length',
+                    'petal width',
+                    'sepal length',
+                    'sepal width'],
+        onOptionClicked: onYColumnClicked3,
+        selectedOption: yColumn3
+        });
+    
+    d3.select('#menu4')
+        .call(dropdownMenu, {
+        options: ['petal width',
+                    'petal length',
+                    'sepal length',
+                    'sepal width'],
+        onOptionClicked: onYColumnClicked4,
+        selectedOption: yColumn4
+        });
+
+    };
 
 // Parse the Data
 d3.csv("iris.csv").then( function(data) {
@@ -31,75 +119,6 @@ d3.csv("iris.csv").then( function(data) {
       .domain( [0,8] )
       .range([height, 0])
   }
-
-  const dropdownMenu = (selection, props) => {
-    const {
-      options,
-      onOptionClicked,
-      selectedOption
-    } = props;
-    
-    let select = selection.selectAll('select').data([null]);
-    select = select.enter().append('select')
-      .merge(select)
-        .on('change', function() {
-          onOptionClicked(this.value);
-        });
-    
-    const option = select.selectAll('option').data(options);
-    option.enter().append('option')
-      .merge(option)
-        .attr('value', d => d)
-        .style("background", "#edf2ff")
-        .property('selected', d => d === selectedOption)
-        .text(d => d)
-  };
-
-  const render = () => {
-      
-    d3.select('#menu1')
-      .call(dropdownMenu, {
-        options: ['sepal length',
-                  'sepal width',
-                  'petal length',
-                  'petal width'],
-        // onOptionClicked: onXColumnClicked,
-        // selectedOption: xColumn
-      });
-    
-    d3.select('#menu2')
-      .call(dropdownMenu, {
-        options: ['sepal length',
-                  'sepal width',
-                  'petal length',
-                  'petal width'],
-        // onOptionClicked: onXColumnClicked,
-        // selectedOption: xColumn
-      });
-
-      d3.select('#menu3')
-      .call(dropdownMenu, {
-        options: ['sepal length',
-                  'sepal width',
-                  'petal length',
-                  'petal width'],
-        // onOptionClicked: onXColumnClicked,
-        // selectedOption: xColumn
-      });
-    
-    d3.select('#menu4')
-      .call(dropdownMenu, {
-        options: ['sepal length',
-                  'sepal width',
-                  'petal length',
-                  'petal width'],
-        // onOptionClicked: onXColumnClicked,
-        // selectedOption: xColumn
-      });
-
-  };
-
-    render()
 
   // Build the X scale -> it find the best position for each Y axis
   x = d3.scalePoint()
@@ -162,8 +181,10 @@ d3.csv("iris.csv").then( function(data) {
     // Add axis title
     .append("text")
       .style("text-anchor", "middle")
-      .attr("y", -9)
-      .text(function(d) { return d; })
-      .style("fill", "black")
+    //   .attr("y", -9)
+    //   .text(function(d) { return d; })
+    //   .style("fill", "black")
+
+      render();
 
 })

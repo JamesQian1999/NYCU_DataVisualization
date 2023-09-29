@@ -5,10 +5,6 @@
     font-size: 25px;
 }
 
-.controls {
-    margin-top: 20px;
-}
-
 .title {
     text-align: center;
     font-size: 50px;
@@ -23,5 +19,18 @@ select {
     font-size: 1rem;
     padding: 2px 5px;
   }
+
+.menu1 {
+    padding: 80px;
+}
+.menu2 {
+    padding: 80px;
+}
+.menu3 {
+    padding: 80px;
+}
+.menu4 {
+    padding: 80px;
+}
 
 /* Define styles as needed for your scatter plot */
