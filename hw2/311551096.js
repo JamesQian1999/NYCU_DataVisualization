@@ -57,7 +57,7 @@ const dropdownMenu = (selection, props) => {
 
 
 
-    const render = (data, dimensions) => {
+    const render = (dimensions) => {
         
         d3.select('#menu1')
             .call(dropdownMenu, {
@@ -152,7 +152,7 @@ const dropdownMenu = (selection, props) => {
           // Draw the lines
           svg
             .selectAll("myPath")
-            .data(data)
+            .data(DATA)
             .join("path")
               .attr("class", function (d) { return "line " + d.class } ) // 2 class for each line: 'line' and the group name
               .attr("d",  path)
@@ -188,6 +188,6 @@ d3.csv("iris.csv").then( function(data) {
     let dimensions = ["sepal length", "sepal width", "petal length", "petal width"];
     console.log('First',dimensions)
     DATA = data
-    render(DATA, dimensions);
+    render(dimensions);
 
 })
