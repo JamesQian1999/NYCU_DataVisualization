@@ -100,8 +100,7 @@ const dropdownMenu = (selection, props) => {
         
         const color = d3.scaleOrdinal()
         .domain(["Iris-setosa", "Iris-versicolor", "Iris-virginica" ])
-        .range([ "#ff7f0e", "#2ca02c", "#1f77b4"])
-        
+        .range([ "#ff7f0e", "#2ca02c", "#1f77b4"])  
 
           const y = {}
           for (i in dimensions) {
@@ -110,12 +109,10 @@ const dropdownMenu = (selection, props) => {
               .domain( [0,8] )
               .range([height-480, 0])
           }
-        
-
+    
         params = dimensions.map(function(d, i) {
             return d + "-" + i;
           });
-          console.log('params:',params)
           x = d3.scalePoint()
             .range([0, width])
             .domain(params);
@@ -212,7 +209,6 @@ function removeNaN(data,length){
 
 d3.csv("http://vis.lab.djosix.com:2023/data/iris.csv").then( function(data) {
     dimensions = ["sepal length", "sepal width", "petal length", "petal width"];
-    console.log('First',dimensions);
     DATA = removeNaN(data, data.length);
     render(dimensions);
 
