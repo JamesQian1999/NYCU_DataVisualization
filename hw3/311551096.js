@@ -1,15 +1,7 @@
 // Graph dimension
-const margin = {top: 100, right: 100, bottom: 100, left: 100},
+const margin = {top: 85, right: 85, bottom: 85, left: 85},
     width = 800 - margin.left - margin.right,
     height = 800 - margin.top - margin.bottom
-
-// Create the svg area
-const svg = d3.select("#grid")
-  .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
 
 function csvToArr(stringVal, splitter) {
     const [keys, ...rest] = stringVal
@@ -24,179 +16,170 @@ function csvToArr(stringVal, splitter) {
     return formedArr;
     }
 
-d3.text("abalone.data", function(data) {
-    data = "Sex,Length,Diameter,Height,Whole_weight,Shucked_weight,Viscera_weight,Shell_weight,Rings\n" + data;
-    console.log("data:",data);
-    NewData = csvToArr(data, ",");
-    // console.log("NewData:",NewData);
-    NewData.forEach((d) => {
-        d.Length            = +d.Length;
-        d.Diameter          = +d.Diameter;
-        d.Height            = +d.Height;
-        d.Whole_weight      = +d.Whole_weight;
-        d.Shucked_weight    = +d.Shucked_weight;
-        d.Viscera_weight    = +d.Viscera_weight;
-        d.Shell_weight      = +d.Shell_weight;
-        d.Rings             = +d.Rings;
-    });
-    console.log("NewData:",NewData);
+function render(sex, num){
 
-    var SEX_M = NewData.filter(function(d){ 
-        return d.Sex == "M"; 
-    })
-    var SEX_F = NewData.filter(function(d){ 
-        return d.Sex == "F"; 
-    })
-    var SEX_I = NewData.filter(function(d){ 
-        return d.Sex == "I"; 
-    })
-
-    cols = ["Length",
-            "Diameter",
-            "Height",
-            "Whole_weight",
-            "Shucked_weight",
-            "Viscera_weight",
-            "Shell_weight",
-            "Rings"]
-    var corr_M = jz.arr.correlationMatrix(SEX_M, cols);
-    console.log("corr_M:",corr_M);
-    var corr_F = jz.arr.correlationMatrix(SEX_F, cols);
-    console.log("corr_F:",corr_F);
-    var corr_I = jz.arr.correlationMatrix(SEX_I, cols);
-    console.log("corr_I:",corr_I);
-
-    var corr = corr_I;
-
-    var extent = d3.extent(corr.map(function(d){ return d.correlation; }).filter(function(d){ return d !== 1; }));
-
-    var grid = data2grid.grid(corr);
-    var rows = d3.max(grid, function(d){ return d.row; });
-
-    // var margin = {top: 20, bottom: 1, left: 20, right: 1};
-
-    // var dim = d3.min([window.innerWidth * 0.9, window.innerHeight * .9]);
-
-    // var width = dim - margin.left - margin.right, height = dim - margin.top - margin.bottom;
-
-    var svg = d3.select("#grid").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + ", " + margin.top + ")");
-
-    var padding = .1;
-
-    var x = d3.scaleBand()
-        .range([0, width])
-        .paddingInner(padding)
-        .domain(d3.range(1, rows + 1));
-
-    var y = d3.scaleBand()
-        .range([0, height])
-        .paddingInner(padding)
-        .domain(d3.range(1, rows + 1));
-
-    var c = chroma.scale(["tomato", "white", "steelblue"])
-        .domain([extent[0], 0, extent[1]]);
-
-    var x_axis = d3.axisTop(y).tickFormat(function(d, i){ return cols[i]; });
-    var y_axis = d3.axisLeft(x).tickFormat(function(d, i){ return cols[i]; });
-
-    svg.append("g")
-        .attr("class", "x axis")
-        .call(x_axis);
-
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(y_axis);
-
-    svg.selectAll("rect")
-        .data(grid, function(d){ return d.column_a + d.column_b; })
-        .enter().append("rect")
-        .attr("x", function(d){ return x(d.column); })
-        .attr("y", function(d){ return y(d.row); })
-        .attr("width", x.bandwidth())
-        .attr("height", y.bandwidth())
-        .style("fill", function(d){ return c(d.correlation); })
-        .style("opacity", 1e-6)
-        .transition()
-        .style("opacity", 1);
-
-    svg.selectAll("rect")
-
-    d3.selectAll("rect")
-        .on("mouseover", function(d){
-
-        d3.select(this).classed("selected", true);
-
-        d3.select(".tip")
-            .style("display", "block")
-            .html(d.column_x + ", " + d.column_y + ": " + d.correlation.toFixed(2));
-
-        var row_pos = y(d.row);
-        var col_pos = x(d.column);
-        var tip_pos = d3.select(".tip").node().getBoundingClientRect();
-        var tip_width = tip_pos.width;
-        var tip_height = tip_pos.height;
-        var grid_pos = d3.select("#grid").node().getBoundingClientRect();
-        var grid_left = grid_pos.left;
-        var grid_top = grid_pos.top;
-
-        var left = grid_left + col_pos + margin.left + (x.bandwidth() / 2) - (tip_width / 2);
-        var top = grid_top + row_pos + margin.top - tip_height - 5;
-
-        d3.select(".tip")
-            .style("left", left + "px")
-            .style("top", top + "px");
-
-        d3.select(".x.axis .tick:nth-of-type(" + d.column + ") text").classed("selected", true);
-        d3.select(".y.axis .tick:nth-of-type(" + d.row + ") text").classed("selected", true);
-        d3.select(".x.axis .tick:nth-of-type(" + d.column + ") line").classed("selected", true);
-        d3.select(".y.axis .tick:nth-of-type(" + d.row + ") line").classed("selected", true);
-
-        })
-        .on("mouseout", function(){
-        d3.selectAll("rect").classed("selected", false);
-        d3.select(".tip").style("display", "none");
-        d3.selectAll(".axis .tick text").classed("selected", false);
-        d3.selectAll(".axis .tick line").classed("selected", false);
+    d3.text("http://vis.lab.djosix.com:2023/data/abalone.data", function(data) {
+        data = "Sex,Length,Diameter,Height,Whole_weight,Shucked_weight,Viscera_weight,Shell_weight,Rings\n" + data;
+        // console.log("data:",data);
+        NewData = csvToArr(data, ",");
+        // console.log("NewData:",NewData);
+        NewData.forEach((d) => {
+            d.Length            = +d.Length;
+            d.Diameter          = +d.Diameter;
+            d.Height            = +d.Height;
+            d.Whole_weight      = +d.Whole_weight;
+            d.Shucked_weight    = +d.Shucked_weight;
+            d.Viscera_weight    = +d.Viscera_weight;
+            d.Shell_weight      = +d.Shell_weight;
+            d.Rings             = +d.Rings;
         });
-
-    // legend scale
-    var legend_top = 15;
-    var legend_height = 15;
-
-    var legend_svg = d3.select("#legend").append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", legend_height + legend_top)
-        .append("g")
-        .attr("transform", "translate(" + margin.left + ", " + legend_top + ")");
-
-    var defs = legend_svg.append("defs");
-
-    var gradient = defs.append("linearGradient")
-        .attr("id", "linear-gradient");
-
-    var stops = [{offset: 0, color: "tomato", value: extent[0]}, {offset: .5, color: "white", value: 0}, {offset: 1, color: "steelblue", value: extent[1]}];
+        console.log("NewData:",NewData);
     
-    gradient.selectAll("stop")
-        .data(stops)
-        .enter().append("stop")
-        .attr("offset", function(d){ return (100 * d.offset) + "%"; })
-        .attr("stop-color", function(d){ return d.color; });
+        var SEX_M = NewData.filter(function(d){ 
+            return d.Sex == "M"; 
+        })
+        var SEX_F = NewData.filter(function(d){ 
+            return d.Sex == "F"; 
+        })
+        var SEX_I = NewData.filter(function(d){ 
+            return d.Sex == "I"; 
+        })
+    
+        cols = ["Length",
+                "Diameter",
+                "Height",
+                "Whole_weight",
+                "Shucked_weight",
+                "Viscera_weight",
+                "Shell_weight",
+                "Rings"]
+        var corr_M = jz.arr.correlationMatrix(SEX_M, cols);
+        console.log("corr_M:",corr_M);
+        var corr_F = jz.arr.correlationMatrix(SEX_F, cols);
+        console.log("corr_F:",corr_F);
+        var corr_I = jz.arr.correlationMatrix(SEX_I, cols);
+        console.log("corr_I:",corr_I);
+    
+        if(sex == "M"){
+            var corr = corr_M;
+            var legend_top = 15;
+        }
+        else if(sex == "F"){
+            var corr = corr_F;
+            var legend_top = 15;
+        }
+        else{
+            var corr = corr_I;
+            var legend_top = 15;
+        }
 
-    legend_svg.append("rect")
-        .attr("width", width)
-        .attr("height", legend_height)
-        .style("fill", "url(#linear-gradient)");
+        // Create the svg area
+        const svg = d3.select("#grid"+num)
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},16)`);
+    
+        var extent = d3.extent(corr.map(function(d){ return d.correlation; }).filter(function(d){ return d !== 1; }));
+    
+        var grid = data2grid.grid(corr);
+        var rows = d3.max(grid, function(d){ return d.row; });
+    
+        var padding = 0.05;
+    
+        var x = d3.scaleBand()
+            .range([0, width])
+            .paddingInner(padding)
+            .domain(d3.range(1, rows + 1));
+    
+        var y = d3.scaleBand()
+            .range([0, height])
+            .paddingInner(padding)
+            .domain(d3.range(1, rows + 1));
+    
+        var color1 = "#FF3C12";
+        var color2 = "#F4F906";
+    
+        var c = chroma.scale([color1, color2])
+            .domain([extent[0], extent[1]]);
+    
+        var x_axis = d3.axisTop(y).tickFormat(function(d, i){ return cols[i]; });
+        var y_axis = d3.axisLeft(x).tickFormat(function(d, i){ return cols[i]; });
+    
+        svg.append("g")
+            .attr("class", "x axis")
+            .call(x_axis);
+    
+        svg.append("g")
+            .attr("class", "y axis")
+            .call(y_axis);
+    
+        svg.selectAll("rect")
+            .data(grid, function(d){ return d.column_a + d.column_b; })
+            .enter().append("rect")
+            .attr("x", function(d){ return x(d.column); })
+            .attr("y", function(d){ return y(d.row); })
+            .attr("width", x.bandwidth())
+            .attr("height", y.bandwidth())
+            .style("fill", function(d){ return c(d.correlation); })
+            .style("opacity", 1e-6)
+            .transition()
+            .style("opacity", 1);
+    
+        console.log("grid:",grid)
+    
+        let roundDecimal = function (val, precision) {
+            return Math.round(Math.round(val * Math.pow(10, (precision || 0) + 1)) / 10) / Math.pow(10, (precision || 0));
+          }
+        svg.selectAll(".rect")
+            .data(grid, function(d){ return ; })
+            .enter().append("text")
+            .attr("x", function(d){ return x(d.column)+x.bandwidth()/2-12; })
+            .attr("y", function(d){ return y(d.row)+y.bandwidth()/2+5; })
+            .text(function(d){
+                return roundDecimal(d.correlation, 2);
+            })
+    
+        // legend scale
+        var legend_height = 15;
+    
+        var legend_svg = d3.select("#legend"+num).append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", legend_height + 15)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + ", " + legend_top + ")");
+    
+        var defs = legend_svg.append("defs");
+    
+        var gradient = defs.append("linearGradient")
+            .attr("id", "linear-gradient");
+    
+        var stops = [{offset: 0, color: color1, value: extent[0]}, {offset: 1, color: color2, value: extent[1]}];
+        
+        gradient.selectAll("stop")
+            .data(stops)
+            .enter().append("stop")
+            .attr("offset", function(d){ return (100 * d.offset) + "%"; })
+            .attr("stop-color", function(d){ return d.color; });
+    
+        legend_svg.append("rect")
+            .attr("width", width)
+            .attr("height", legend_height)
+            .style("fill", "url(#linear-gradient)");
+    
+        legend_svg.selectAll("text")
+            .data(stops)
+            .enter().append("text")
+            .attr("x", function(d){ return width * d.offset; })
+            .attr("dy", -3)
+            .style("text-anchor", function(d, i){ return i == 0 ? "start" : i == 1 ? "middle" : "end"; })
+            .text(function(d, i){ return d.value.toFixed(2) + (i == 2 ? ">" : ""); })
+    });
 
-    legend_svg.selectAll("text")
-        .data(stops)
-        .enter().append("text")
-        .attr("x", function(d){ return width * d.offset; })
-        .attr("dy", -3)
-        .style("text-anchor", function(d, i){ return i == 0 ? "start" : i == 1 ? "middle" : "end"; })
-        .text(function(d, i){ return d.value.toFixed(2) + (i == 2 ? ">" : ""); })
-});
+}
+
+render("M", "1"); 
+render("F", "2"); 
+render("I", "3"); 
 
