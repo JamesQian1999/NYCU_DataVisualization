@@ -18,6 +18,10 @@ var yAxis = d3.svg.axis()
     .orient("left")
     .ticks(6);
 
+//取得x軸的上下界
+// var xMax = data
+
+
 function color(c) {
     s = ["Iris-setosa", "Iris-versicolor", "Iris-virginica"];
     colors = ["#ff7f0e", "#2ca02c", "#1f77b4"];
@@ -91,14 +95,9 @@ d3.csv("iris.csv", function (error, data) {
     .attr("class", "cell")
     .attr("transform", function (d) { return "translate(" + (n - d.i - 1) * size + "," + d.j * size + ")"; });
 
-    // Titles for the diagonal.
-    cell.filter(function(d) { return d.i === d.j; }).append("text")
-        .attr("x", padding)
-        .attr("y", padding)
-        .attr("dy", ".71em")
-        .text(function(d) { return d.x; });
     cell.filter(function (d) { return d.i === d.j; })
     .each(plotDiagonal);
+     
     // Scatterplots for the non-diagonal elements.
     cell.filter(function (d) { return d.i !== d.j; })
     .each(plotScatter);
@@ -106,44 +105,80 @@ d3.csv("iris.csv", function (error, data) {
     cell.call(brush);
 
     function plotDiagonal(p) {
-        // var cell = d3.select(this);
-        // var trait = p.x;
-        
-        // console.log("trait:",trait);
-        // console.log("data:",data);
-        // x.domain(domainByTrait[trait]);
-
-        // var dataValues = data.map(function (d) { return +d[trait]; });
-
-        // console.log(dataValues);
-        // var hist = d3.layout.histogram()
-        //     .bins(x.ticks(20))
-        //     (dataValues);
-
-        // var histScale = d3.scale.linear()
-        //     .domain([0, d3.max(hist, function (d) { return d.y; })])
-        //     .range([size - padding / 2, padding / 2]);
-
+        var cell = d3.select(this);
+        var xTrait = p.x;
+        var yTrait = p.y;
+    
+        // Get the data's minimum and maximum values
+        var xmin = domainByTrait[xTrait][0];
+        var xmax = domainByTrait[xTrait][1];
+    
+        // Create an x scale
+        var xScale = d3.scale.linear()
+            .domain([xmin, xmax])
+            .range([padding / 2, size - padding / 2]);
+    
+        // Create a histogram layout
+        var histogram = d3.layout.histogram()
+            .bins(xScale.ticks(20))
+            .value(function(d) { return d[xTrait]; });
+    
+        // Group data by class
+        var classes = d3.set(data.map(function(d) { return d.class; })).values();
+    
+        // Stack layout
+        var stack = d3.layout.stack()
+            .offset("zero")
+            .values(function(d) { return d.values; });
+    
+        // Prepare data for stacking
+        var dataForStack = classes.map(function(className) {
+            var classData = data.filter(function(d) { return d.class === className; });
+            return {
+                class: className,
+                values: histogram(classData)
+            };
+        });
+    
+        // Stack the data
+        var stackedData = stack(dataForStack);
+    
+        // Create a y scale
+        var yScale = d3.scale.linear()
+            .domain([0, d3.max(stackedData, function(layer) {
+                return d3.max(layer.values, function(d) {
+                    return d.y + d.y0;
+                });
+            })])
+            .nice()
+            .range([size - padding / 2, padding / 2]);
+    
+        // Create a frame (rectangle)
         cell.append("rect")
             .attr("class", "frame")
             .attr("x", padding / 2)
             .attr("y", padding / 2)
             .attr("width", size - padding)
             .attr("height", size - padding);
-
-        // console.log("hist:",hist);
-        // cell.selectAll(".bar")
-        //     .data(hist)
-        //     .enter().append("rect")
-        //     .attr("class", "bar")
-        //     .attr("x", 40)
-        //     .attr("width", size / 20 - 1)
-        //     .attr("y", function (d) { return histScale(d.y); })
-        //     .attr("height", function (d) { return size - histScale(d.y) - padding / 2; })
-        //     .style("fill", function (d){
-        //         return color(d.class);
-        //         });
-    }
+    
+        // Create bars for each class
+        var bars = cell.selectAll(".bar")
+            .data(stackedData)
+            .enter().append("g")
+            .attr("class", "bar")
+            .style("fill", function(d) {
+                // Set the color of the bars here
+                return color(d.class);
+            });
+    
+        bars.selectAll("rect")
+            .data(function(d) { return d.values; })
+            .enter().append("rect")
+            .attr("x", function(d) { return xScale(d.x); })
+            .attr("y", function(d) { return yScale(d.y + d.y0); })
+            .attr("width",13)
+            .attr("height", function(d) { return yScale(d.y0) - yScale(d.y + d.y0); });
+    } 
 
     function plotScatter(p) {
         var cell = d3.select(this);
@@ -170,6 +205,13 @@ d3.csv("iris.csv", function (error, data) {
             return color(d.class);
             });
     }
+
+    // Titles for the diagonal.
+    cell.filter(function(d) { return d.i === d.j; }).append("text")
+        .attr("x", padding)
+        .attr("y", padding)
+        .attr("dy", ".71em")
+        .text(function(d) { return d.x; });
 
     var brushCell;
 
