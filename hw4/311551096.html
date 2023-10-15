@@ -1,50 +1,54 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
+    svg {
+    font: 10px sans-serif;
+    padding: 10px;
+    }
 
-svg {
-  font: 10px sans-serif;
-  padding: 10px;
-}
+    .axis,
+    .frame {
+    shape-rendering: crispEdges;
+    }
 
-.axis,
-.frame {
-  shape-rendering: crispEdges;
-}
+    .axis line {
+    stroke: #ddd;
+    }
 
-.axis line {
-  stroke: #ddd;
-}
+    .axis path {
+    display: none;
+    }
 
-.axis path {
-  display: none;
-}
+    .cell text {
+    font-weight: bold;
+    text-transform: capitalize;
+    }
 
-.cell text {
-  font-weight: bold;
-  text-transform: capitalize;
-}
+    .frame {
+    fill: none;
+    stroke: #aaa;
+    }
 
-.frame {
-  fill: none;
-  stroke: #aaa;
-}
+    circle {
+    fill-opacity: .8;
+    }
 
-circle {
-  fill-opacity: .7;
-}
+    circle.hidden {
+    fill: #ccc !important;
+    }
 
-circle.hidden {
-  fill: #ccc !important;
-}
-
-.extent {
-  fill: #000;
-  fill-opacity: .125;
-  stroke: #fff;
-}
-
+    .extent {
+    fill: #000;
+    fill-opacity: .125;
+    stroke: #fff;
+    }
 </style>
-<body>
+<link rel="stylesheet" href="311551096.css">
 <script src="https://d3js.org/d3.v3.min.js"></script>
-<script src="311551096.js"></script>
+<body>
+    <h1 class = title>Brushable Scatter Plot Matrix</h1>
+    <h2 class = ID>311551096 錢承</h2>
+    <div class="container">
+        <script src="311551096.js"></script>
+    </div>
+</body>

@@ -46,7 +46,7 @@ function removeNaN(data, length) {
     return data;
 }
 
-d3.csv("iris.csv", function (error, data) {
+d3.csv("http://vis.lab.djosix.com:2023/data/iris.csv", function (error, data) {
     if (error) throw error;
 
     data = removeNaN(data, data.length);
@@ -69,7 +69,7 @@ d3.csv("iris.csv", function (error, data) {
     .on("brush", brushmove)
     .on("brushend", brushend);
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("div").append("svg")
     .attr("width", size * n + padding)
     .attr("height", size * n + padding)
     .append("g")
