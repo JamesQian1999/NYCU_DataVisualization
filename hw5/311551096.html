@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World University Rankings Visualization</title>
+    <link rel="stylesheet" href="311551096.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>World University Rankings</h1>
+        <h2 class = ID>311551096 錢承</h2>
+        <select id="sortCriteria">
+            <option value="scores_overall">Overall Scores</option>
+            <option value="scores_teaching">Teaching</option>
+            <option value="scores_research">Research</option>
+            <option value="scores_citations">Citations</option>
+            <option value="scores_industry_income">Industry Income</option>
+            <option value="scores_international_outlook">International Outlook</option>
+        </select>
+        <button onclick="sortData('asc')">Sort Asc</button>
+        <button onclick="sortData('desc')">Sort Desc</button>
+        <div class="chart"></div>
+    </div>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="311551096.js"></script>
+</body>
+
+</html>
