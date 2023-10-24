@@ -20,7 +20,7 @@ let allData;
 // SVG canvas
 const svg = d3.select(".chart").append("svg")
     .attr("width", width + margin.left + margin.right+100)
-    .attr("height", 21300)
+    .attr("height", 30300)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -31,7 +31,7 @@ const tooltip = d3.select("body").append("div")
 function sortData(order) {
     const criteria = document.getElementById("sortCriteria").value;
     console.log("criteria:",criteria+"_rank");
-    if (order === "asc") {
+    if (order === "desc") {
         allData.sort((a, b) => a[criteria+"_rank"] - b[criteria+"_rank"]);
     } else {
         allData.sort((b, a) => a[criteria+"_rank"] - b[criteria+"_rank"]);
@@ -147,7 +147,7 @@ function updateChart(data) {
 }
 
 // Load data
-d3.csv("TIMES_WorldUniversityRankings_2024.csv").then(data => {
+d3.csv("http://vis.lab.djosix.com:2023/data/TIMES_WorldUniversityRankings_2024.csv").then(data => {
     allData = data;
     allData.forEach(d => {
         d["scores_teaching"]                = d["scores_teaching"]=='n/a'              ? 0 : +d["scores_teaching"];
