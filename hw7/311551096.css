@@ -1,0 +1,27 @@
+.chart {
+    display: inline-block;
+    position: relative;
+    width: 200px;
+    height: 100px;
+    margin: 5px;
+  }
+  
+  .axis {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  
+  path {
+    fill: none;
+    stroke: #000;
+    stroke-width: 1.5px;
+  }
+  
+  .label {
+    font-size: 10px;
+    text-anchor: middle;
+  }
+  
