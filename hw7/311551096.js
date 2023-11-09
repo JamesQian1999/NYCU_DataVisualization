@@ -1,4 +1,17 @@
-d3.csv("../air-pollution.csv").then(data => {
+// Define a function that returns color ranges based on the pollutant
+function pollutantColors(pollutant) {
+    const colorRanges = {
+        'CO': ["#c6dbef", "#9ecae1", "#6baed6", "#3182bd", "#08519c"],
+        'NO2': ["#c7e9c0", "#a1d99b", "#74c476", "#41ab5d", "#238b45"],
+        'O3': ["#fdd0a2", "#fdae6b", "#fd8d3c", "#f16913", "#d94801"],
+        'PM2.5': ["#fcbba1", "#fc9272", "#fb6a4a", "#ef3b2c", "#cb181d"],
+        'PM10': ["#dadaeb", "#bcbddc", "#9e9ac8", "#756bb1", "#54278f"],
+        'SO2': ["#d9d9d9", "#bdbdbd", "#969696", "#737373", "#525252"]
+    };
+    return colorRanges[pollutant] || colorRanges['CO']; // default if not found
+}
+
+d3.csv("http://vis.lab.djosix.com:2023/data/air-pollution.csv").then(data => {
     const parseDate = d3.timeParse("%Y-%m-%d %H:%M");
     data.forEach(d => {
       d['Measurement date'] = parseDate(d['Measurement date']);
@@ -9,16 +22,13 @@ d3.csv("../air-pollution.csv").then(data => {
       d['PM2.5'] = +d['PM2.5'];
       d['PM10']  = +d['PM10'];
       d['SO2']   = +d['SO2'];
-  
     })
     
-    // districts = [{"stock":"A","values":[1,0.1,3,3.2]},{"stock":"B","values":[3.4,2,3,4]},{"stock":"C","values":[2.4,2,3.2,1.4]}];
     console.log("data:",data);
     let groupedByDistrict = Object.groupBy(data, ({ Address }) => Address);
     const districts = Object.keys(groupedByDistrict);
-    
-    console.log("groupedByDistrict:",groupedByDistrict);
 
+    console.log("groupedByDistrict:",groupedByDistrict);
 
 
     // Add a time formatter for day resolution
@@ -69,6 +79,7 @@ d3.csv("../air-pollution.csv").then(data => {
     districts.forEach(d => {
         SortData.push({"district": d, 
                         "values" :{
+                            "time"  : groupedByDistrict[d].map(item => item['Measurement date']),
                             "CO"    : groupedByDistrict[d].map(item => item['CO']),
                             "NO2"   : groupedByDistrict[d].map(item => item['NO2']),
                             "O3"    : groupedByDistrict[d].map(item => item['O3']),
@@ -83,41 +94,27 @@ d3.csv("../air-pollution.csv").then(data => {
     // Correctly bind data and create horizon charts
     const pollutants = ['CO', 'NO2', 'O3', 'PM2.5', 'PM10', 'SO2']; // List of pollutants
 
-    // You will need to create a wrapper div to contain all horizon chart divs
-    const chartWrapper = d3.select('body').selectAll('div.chartWrapper')
-    .data(SortData)
-    .enter()
-    .append('div')
-    .attr('class', 'chartWrapper');
-
-    // For each district, create a horizon chart for each pollutant
+    const districtWrapper = d3.select('body').append('div').attr('class', 'districtWrapper');
     SortData.forEach(districtData => {
-    pollutants.forEach(pollutant => {
-        chartWrapper.append('div')
-        .datum(districtData.values[pollutant]) // Bind pollutant data
-        .attr('class', 'horizon')
-        .each(function(d) {
-            d3.horizonChart()
-            .title(`${districtData.district} - ${pollutant}`) // Set the title to district and pollutant
-            .height(50)
-            .colors(["#313695", "#4575b4", "#74add1", "#abd9e9", "#e0f3f8", "#ffffbf", "#fee090", "#fdae61", "#f46d43", "#d73027", "#a50026"]) // Example color range
-            .call(this, d);
+        // Create a container for each district
+
+        pollutants.forEach(pollutant => {
+            const horizonDiv = districtWrapper.append('div')
+                .attr('class', 'horizon');
+    
+            // Pass the data for the specific district and pollutant into the horizon chart
+            horizonDiv.datum(districtData.values[pollutant])
+                .each(function(d) {
+                    d3.horizonChart()
+                    .title(`${districtData.district} - ${pollutant}`) // Set the title to district and pollutant
+                    .height(70) // Reduced height if too many charts
+                    .colors(pollutantColors(pollutant)) // Call a function to get the color range per pollutant
+                    .call(this, d);
+                });
         });
     });
-    });
 
-    // d3.select('body')
-    // .data(SortData)
-    // .enter()
-    // .append('div')
-    // .attr('class', 'horizon')
-    // .each(function(d) {
-    //     d3.horizonChart()
-    //         .title(d.district)
-    //         .height(50)
-    //         .call(this, d.values['CO'])
-    //         ;
-    // });
+
 
 });
 

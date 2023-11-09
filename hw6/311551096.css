@@ -1,0 +1,85 @@
+text{
+    font-size: 2em;
+}
+
+.text-barchart {
+    font-size: 1em;
+}
+
+.legend_text{
+    font-size: 1em;
+}
+
+.path_text{
+    font-size: 0.5em;
+}
+
+.date_text {
+    font-weight: bold;
+    font-size: 7em;
+}
+
+.tick text{
+    font-size: 1.6em;
+    fill: #333333;
+}
+
+
+.tick line {
+    stroke: #cccccc;
+}
+
+#population{
+    font-size: 3em;
+    stroke: #333333
+}
+
+#horsepower{
+    font-size: 3em;
+    stroke: #333333
+}
+
+Copy code
+.tooltip {
+  position: absolute;
+  text-align: center;
+  width: 60px;
+  height: 28px;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.hidden {
+    display: none;
+}
+
+.b{
+    height:30px;
+    width:150px;
+}
+
+#color_house_2  { background-color: #9b59b6; }
+#color_house_2  { background-color: #DD6B66; }
+#color_house_3  { background-color: #759AA0; }
+#color_house_4  { background-color: #E69D87; }
+#color_house_5  { background-color: #8DC1A9; }
+#color_unit_1   { background-color: #EA7E53; }
+#color_unit_2   { background-color: #EEDD78; }
+#color_unit_3   { background-color: #73A373; }
+
+#house_2  { accent-color: #9b59b6; }
+#house_2  { accent-color: #DD6B66; }
+#house_3  { accent-color: #759AA0; }
+#house_4  { accent-color: #E69D87; }
+#house_5  { accent-color: #8DC1A9; }
+#unit_1   { accent-color: #EA7E53; }
+#unit_2   { accent-color: #EEDD78; }
+#unit_3   { accent-color: #73A373; }
+
+.checkbox{
+    font-size: 21px;
+}

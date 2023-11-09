@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ThemeRiver</title>
+    <link rel="stylesheet" href="311551096.css"> 
+    <script src="https://d3js.org/d3.v6.js"></script>
+  </head>
+
+<h1>ThemeRiver</h1>
+<h2 class = ID>311551096 錢承</h2>
+<button type="button" class="b" onclick="OrderByType()">Order by type</button>&ensp;<button type="button" class="b" onclick="OrderByBedrooms()">Order by room</button><br><br>
+<input type="checkbox" id="house_2"  checked onclick="updateChart()"> <label class="checkbox" for="house_2" id="color_house_2"> House: 2 Bedrooms&ensp;</label>
+<input type="checkbox" id="house_3" checked onclick="updateChart()">  <label class="checkbox" for="house_3" id="color_house_3"> House: 3 Bedrooms&ensp;</label>
+<input type="checkbox" id="house_4" checked onclick="updateChart()">  <label class="checkbox" for="house_4" id="color_house_4"> House: 4 Bedrooms&ensp;</label>
+<input type="checkbox" id="house_5" checked onclick="updateChart()">  <label class="checkbox" for="house_5" id="color_house_5"> House: 5 Bedrooms&ensp;</label><br><br>
+<input type="checkbox" id="unit_1" checked onclick="updateChart()">   <label class="checkbox" for="unit_1" id="color_unit_1"> Unit:1 Bedrooms&ensp;&ensp;&ensp;</label>
+<input type="checkbox" id="unit_2" checked onclick="updateChart()">   <label class="checkbox" for="unit_2" id="color_unit_2"> Unit:2 Bedrooms&ensp;&ensp;&ensp;</label>
+<input type="checkbox" id="unit_3" checked onclick="updateChart()">   <label class="checkbox" for="unit_3" id="color_unit_3"> Unit:3 Bedrooms&ensp;&ensp;&ensp;</label>
+  <body style="text-align: center">
+    <svg width="1750" height="920" id="mainsvg" class="svgs" style="background-color: #ffffff;"></svg>
+    <script src="311551096.js"></script>
+  </body>
+</html>
