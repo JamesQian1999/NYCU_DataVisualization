@@ -473,7 +473,7 @@ d3.text("car.data", function(data) {
     .enter().append("path")
       .attr("class", "link")
       .attr("d", path)
-      .style("stroke-width", function(d) { return Math.max(1, d.dy); })
+      .style("stroke-width", function(d) { console.log(d); return Math.max(1, d.dy); })
       .sort(function(a, b) { return b.dy - a.dy; });
 
   // add the link titles
@@ -517,7 +517,7 @@ d3.text("car.data", function(data) {
       .attr("dy", ".35em")
       .attr("text-anchor", "end")
       .attr("transform", null)
-      .text(function(d) { return d.name; })
+      .text(function(d) { return d.name.replace("_",": "); })
     .filter(function(d) { return d.x < width / 2; })
       .attr("x", 6 + sankey.nodeWidth())
       .attr("text-anchor", "start");
