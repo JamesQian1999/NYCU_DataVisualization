@@ -1,3 +1,6 @@
+let AllData;
+var units = "Widgets";
+
 d3.sankey = function() {
   var sankey = {},
       nodeWidth = 24,
@@ -130,14 +133,6 @@ d3.sankey = function() {
     //
     moveSinksRight(x);
     scaleNodeBreadths((size[0] - nodeWidth) / (x - 1));
-  }
-
-  function moveSourcesRight() {
-    nodes.forEach(function(node) {
-      if (!node.targetLinks.length) {
-        node.x = d3.min(node.sourceLinks, function(d) { return d.target.x; }) - 1;
-      }
-    });
   }
 
   function moveSinksRight(x) {
@@ -293,8 +288,6 @@ d3.sankey = function() {
   return sankey;
 };
 
-var units = "Widgets";
-
 // set the dimensions and margins of the graph
 var margin = {top: 10, right: 10, bottom: 10, left: 10},
     width = 1500 - margin.left - margin.right,
@@ -334,50 +327,25 @@ function csvToArr(stringVal, splitter) {
   return formedArr;
   }
 
-function GetAllCombinations() {
-  const attributes = {
-    buying: ['buying_vhigh', 'buying_high', 'buying_med', 'buying_low'],
-    maint: ['maint_vhigh', 'maint_high', 'maint_med', 'maint_low'],
-    doors: ['doors_2', 'doors_3', 'doors_4', 'doors_5more'],
-    persons: ['persons_2', 'persons_4', 'persons_more'],
-    lug_boot: ['lugboot_small', 'lugboot_med', 'lugboot_big'],
-    safety: ['safety_low', 'safety_med', 'safety_high']
-  };
-
+function GetAllCombinations(attributes) {
+  
   const keys = Object.keys(attributes);
   const combinations = [];
 
   // Any two attributes
-  // for (let i = 0; i < keys.length; i++) {
-  //   for (let j = i + 1; j < keys.length; j++) {
-  //     const firstAttribute = keys[i];
-  //     const secondAttribute = keys[j];
+  for (let i = 0; i < keys.length; i++) {
+    for (let j = i + 1; j < keys.length; j++) {
+      const firstAttribute = keys[i];
+      const secondAttribute = keys[j];
 
-  //     attributes[firstAttribute].forEach(firstValue => {
-  //       attributes[secondAttribute].forEach(secondValue => {
-  //         combinations.push({
-  //           [firstAttribute]: firstValue,
-  //           [secondAttribute]: secondValue
-  //         });
-  //       });
-  //     });
-  //   }
-  // }
-
-  for (let i = 0; i < keys.length - 1; i++) {
-    const currentAttribute = keys[i];
-    const neighborAttribute = keys[i + 1];
-
-    const currentOptions = attributes[currentAttribute];
-    const neighborOptions = attributes[neighborAttribute];
-
-    for (const currentValue of currentOptions) {
-      for (const neighborValue of neighborOptions) {
-        let pair = {};
-        pair[currentAttribute] = currentValue;
-        pair[neighborAttribute] = neighborValue;
-        combinations.push(pair);
-      }
+      attributes[firstAttribute].forEach(firstValue => {
+        attributes[secondAttribute].forEach(secondValue => {
+          combinations.push({
+            [firstAttribute]: firstValue,
+            [secondAttribute]: secondValue
+          });
+        });
+      });
     }
   }
   
@@ -390,13 +358,11 @@ function countAttributePairings(data, attr1, value1, attr2, value2) {
 }
 
 // load the data
-d3.text("car.data", function(data) {
+d3.text("http://vis.lab.djosix.com:2023/data/car.data", function(data) {
 
-  data = "buying,maint,doors,persons,lug_boot,safety\n" + data;
-
+  data = "buying,maint,doors,persons,lug_boot,safety,class\n" + data;
   data = csvToArr(data, ",");
 
-  pairData = {};
   data.forEach((d) => {
       d.buying    = "buying_"   + d.buying  ;
       d.maint     = "maint_"    + d.maint   ;
@@ -404,32 +370,40 @@ d3.text("car.data", function(data) {
       d.persons   = "persons_"  + d.persons ;
       d.lug_boot  = "lugboot_"  + d.lug_boot;    
       d.safety    = "safety_"   + d.safety  ;
+      d.class     = "class_"    + d.class   ;
   });
-
-  console.log("data:",data);
   
   // Log the total number of combinations
-  combinations = GetAllCombinations();
+  let attributes = {
+    "buying"  : ['buying_vhigh', 'buying_high', 'buying_med', 'buying_low'],
+    "maint"   : ['maint_vhigh', 'maint_high', 'maint_med', 'maint_low'],
+    "doors"   : ['doors_2', 'doors_3', 'doors_4', 'doors_5more'],
+    "persons" : ['persons_2', 'persons_4', 'persons_more'],
+    "lug_boot": ['lugboot_small', 'lugboot_med', 'lugboot_big'],
+    "safety"  : ['safety_low', 'safety_med', 'safety_high'],
+    "class"   : ['class_unacc', 'class_acc', 'class_good', 'class_vgood']
+  };
 
-  console.log("combinations:",combinations);
+  AllData = data;
+  render(attributes);
+});
+
+
+function render(attributes){
+  data = AllData;
+  combinations = GetAllCombinations(attributes);
+
+  pairData = {};
   for( pair in combinations ){
-    // console.log("pair:",combinations[pair]);
     key = Object.keys(combinations[pair])
     value = Object.values(combinations[pair])
     pairData[value[0]+"-"+value[1]] = countAttributePairings(data, key[0], value[0], key[1], value[1]);
   }
-  // const count = countAttributePairings(data, 'buying', 'buying_vhigh', 'maint', 'maint_vhigh');
-  // console.log('Count of buying_vhigh and maint_vhigh pairings:', count);
-  console.log("pairData:",pairData);
-
 
   preprocess = [];
   for( pair in pairData ){
-    // console.log("pair:",pair);
     preprocess.push({'source':pair.split("-")[0], 'target':pair.split("-")[1], 'value':pairData[pair]});
   }
-
-  console.log("preprocess:",preprocess);
  
   //set up graph in same style as original example but empty
   graph = {"nodes" : [], "links" : []};
@@ -441,8 +415,6 @@ d3.text("car.data", function(data) {
                        "target": d.target,
                        "value": +d.value });
    });
-
-  // console.log("graph:",graph);
 
   // return only the distinct / unique nodes
   graph.nodes = d3.keys(d3.nest()
@@ -466,6 +438,17 @@ d3.text("car.data", function(data) {
       .nodes(graph.nodes)
       .links(graph.links)
       .layout(32);
+  
+    var tooltip = d3.select("body").append("div") 
+      .attr("class", "tooltip")       
+      .style("opacity", 0)
+      .style("position", "absolute")
+      .style("background-color", "white")
+      .style("border", "solid")
+      .style("border-width", "1px")
+      .style("border-radius", "5px")
+      .style("padding", "10px")
+      .style("z-index", "10"); // make sure it's on top
 
   // add in the links
   var link = svg.append("g").selectAll(".link")
@@ -473,14 +456,29 @@ d3.text("car.data", function(data) {
     .enter().append("path")
       .attr("class", "link")
       .attr("d", path)
-      .style("stroke-width", function(d) { console.log(d); return Math.max(1, d.dy); })
-      .sort(function(a, b) { return b.dy - a.dy; });
+      .style("stroke-width", function(d) {  return Math.max(1, d.dy); })
+      .on("mouseover", function(event, d) {
+        var x = d3.event.pageX;
+        var y = d3.event.pageY;
 
-  // add the link titles
-  link.append("title")
-        .text(function(d) {
-    		return d.source.name + " → " + 
-                d.target.name + "\n" + format(d.value); });
+        tooltip.transition()
+          .duration(5)
+          .style("opacity", 0.9);
+        tooltip.html(graph.links[d].source.name.replace("_",": ") + " → " + graph.links[d].target.name.replace("_",": ") + "<br/>" + graph.links[d].value)
+          .style("height", "auto")
+          .style("width", "auto")
+          .style("left", (x+10) + "px")
+          .style("top",  (y+10) + "px");
+
+        d3.select(this).style("stroke-opacity", 0.5);
+        })
+        .on("mouseout", function() {
+            tooltip.transition()
+              .duration(5)
+              .style("opacity", 0);
+            d3.select(this).style("stroke-opacity", 0.2);
+        });
+
 
   // add in the nodes
   var node = svg.append("g").selectAll(".node")
@@ -496,7 +494,17 @@ d3.text("car.data", function(data) {
         .on("start", function() {
           this.parentNode.appendChild(this);
         })
-        .on("drag", dragmove));
+        .on("drag", function dragmove(d) {
+          // the function for moving the nodes
+          d3.select(this)
+            .attr("transform", 
+                  "translate(" 
+                    + (d.x = Math.max(0, d3.event.x) ) + "," 
+                    + (d.y = Math.max(0, Math.min(height - d.dy, d3.event.y)))
+                    + ")");
+          sankey.relayout();
+          link.attr("d", path);
+        }));
 
   // add the rectangles for the nodes
   node.append("rect")
@@ -521,17 +529,24 @@ d3.text("car.data", function(data) {
     .filter(function(d) { return d.x < width / 2; })
       .attr("x", 6 + sankey.nodeWidth())
       .attr("text-anchor", "start");
+}
 
-  // the function for moving the nodes
-  function dragmove(d) {
-    d3.select(this)
-      .attr("transform", 
-            "translate(" 
-               + d.x + "," 
-               + (d.y = Math.max(
-                  0, Math.min(height - d.dy, d3.event.y))
-                 ) + ")");
-    sankey.relayout();
-    link.attr("d", path);
-  }
-});
+// Function to update the chart based on checkbox changes
+function updateChart() {
+   // Get the current status of checkboxes
+   var selectedAttributes = {
+    "buying"  : document.getElementById("buying").checked   ? ['buying_vhigh', 'buying_high', 'buying_med', 'buying_low'] : [],
+    "maint"   : document.getElementById("maint").checked    ? ['maint_vhigh', 'maint_high', 'maint_med', 'maint_low']     : [],
+    "doors"   : document.getElementById("doors").checked    ? ['doors_2', 'doors_3', 'doors_4', 'doors_5more']            : [],
+    "persons" : document.getElementById("persons").checked  ? ['persons_2', 'persons_4', 'persons_more']                  : [],
+    "lug_boot": document.getElementById("lug_boot").checked ? ['lugboot_small', 'lugboot_med', 'lugboot_big']             : [],
+    "safety"  : document.getElementById("safety").checked   ? ['safety_low', 'safety_med', 'safety_high']                 : [],
+    "class"   : document.getElementById("class").checked    ? ['class_unacc', 'class_acc', 'class_good', 'class_vgood']   : []
+  };
+
+  // Clear the existing SVG to prepare for new rendering
+  svg.selectAll("*").remove();
+
+  // Render the sankey with the selected attributes
+  render(selectedAttributes);
+}

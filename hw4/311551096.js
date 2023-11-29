@@ -46,7 +46,7 @@ function removeNaN(data, length) {
     return data;
 }
 
-d3.csv("http://vis.lab.djosix.com:2023/data/iris.csv", function (error, data) {
+d3.csv("iris.csv", function (error, data) {
     if (error) throw error;
 
     data = removeNaN(data, data.length);

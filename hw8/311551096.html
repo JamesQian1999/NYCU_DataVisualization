@@ -7,7 +7,7 @@ body {
         margin: 0;
         padding: 0;
     }
-    
+
 .node rect {
   cursor: move;
   fill-opacity: .9;
@@ -25,19 +25,23 @@ body {
   stroke-opacity: .2;
 }
 
-.link:hover {
-  stroke-opacity: .5;
-}
+
 
 </style>
 
-<h1>Sankey Diagram</h1>
-<h2 class = ID>311551096 錢承</h2>
-<body></body>
 <body>
-
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script src="311551096.js"></script>
-
+  <div>
+    <h1>Sankey Diagram</h1>
+    <h2 class = ID>311551096 錢承</h2>
+    <input type="checkbox" id="buying"  checked onclick="updateChart()"> <label class="checkbox" for="buying" id="color_buying"> buying&ensp;</label>
+    <input type="checkbox" id="maint" checked onclick="updateChart()">  <label class="checkbox" for="maint" id="color_maint"> maint&ensp;</label>
+    <input type="checkbox" id="doors" checked onclick="updateChart()">  <label class="checkbox" for="doors" id="color_doors"> doors&ensp;</label>
+    <input type="checkbox" id="persons" checked onclick="updateChart()">  <label class="checkbox" for="persons" id="color_persons"> persons&ensp;</label>
+    <input type="checkbox" id="lug_boot" checked onclick="updateChart()"> <label class="checkbox" for="lug_boot" id="color_lug_boot"> lug_boot&ensp;</label>
+    <input type="checkbox" id="safety" checked onclick="updateChart()">   <label class="checkbox" for="safety" id="color_safety"> safety&ensp;</label>
+    <input type="checkbox" id="class" checked onclick="updateChart()">   <label class="checkbox" for="class" id="color_class"> class&ensp;</label>
+  </div>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="311551096.js"></script>
 </body>
 

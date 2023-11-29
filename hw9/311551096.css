@@ -1,0 +1,51 @@
+.container {
+    text-align: center;
+    width: 80%;
+    margin: 100px auto;
+    font-family: Arial, sans-serif;
+}
+
+.axis .domain {
+    display: none;
+}
+
+legend {
+    font-size: 12px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.hw{
+    text-align: center;
+    font-size: 28px;
+}
+
+.ID {
+    text-align: center;
+    font-size: 25px;
+}
+
+.y.axis text {
+    font-size: 10px;
+}
+
+.chart {
+    width: 1000px; 
+    height:450;
+    overflow-y: auto;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    width: 100px;
+    height: 28px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: white;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none; 
+}
