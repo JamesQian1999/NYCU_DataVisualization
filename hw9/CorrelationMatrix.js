@@ -36,7 +36,7 @@ function csvToArr(stringVal, splitter) {
 function render(name){
     svg.selectAll("*").remove();
     legend_svg.selectAll("*").remove();
-    d3.text("spotify_tracks_rank.csv", function(data) {
+    d3.text("http://vis.lab.djosix.com:2023/data/spotify_tracks.csv", function(data) {
         data = csvToArr(data, ",");
 
         // console.log("NewData:",data);

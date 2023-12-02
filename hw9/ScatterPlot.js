@@ -229,12 +229,12 @@
   };
 
 
-  d3.csv('spotify_tracks_rank.csv')
+  d3.csv('http://vis.lab.djosix.com:2023/data/spotify_tracks.csv')
     .then(loadedData => {  
       data = loadedData;
       data.forEach(d => {
           d['popularity']       = +d['popularity'];
-          d['popularity_rank']  = +d['popularity_rank'];
+          d['popularity_rank']  = (+d['popularity'])/10;
           d['duration_ms']      = +d['duration_ms'];
           d['danceability']     = +d['danceability'];
           d['energy']           = +d['energy'];

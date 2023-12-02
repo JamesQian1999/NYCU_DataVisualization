@@ -1,40 +1,6 @@
-
-.ScatterPlot {
-    display: block;
-    width: 100%;
-    border: none;
-    background-color: #04AA6D;
-    padding: 20px 28px;
-    font-size: 16px;
-    cursor: pointer;
-    text-align: center;
-  }
-
-.CorrelationMatrix {
-    display: block;
-    width: 100%;
-    border: none;
-    background-color: #96da18;
-    padding: 20px 28px;
-    font-size: 16px;
-    cursor: pointer;
-    text-align: center;
-  }
-
-.StackedBarCharts {
-    display: block;
-    width: 100%;
-    border: none;
-    background-color: #0468aa;
-    padding: 20px 28px;
-    font-size: 16px;
-    cursor: pointer;
-    text-align: center;
-  }
-
 .container {
     text-align: center;
-    width: 100%;
+    width: 80%;
     margin: 100px auto;
     font-family: Arial, sans-serif;
 }
@@ -49,7 +15,6 @@ legend {
 
 h1 {
     text-align: center;
-    font-size: 50px;
 }
 
 .hw{
