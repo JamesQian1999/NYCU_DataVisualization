@@ -4,6 +4,12 @@
     margin: 100px auto;
     font-family: Arial, sans-serif;
 }
+body {
+    text-align: center;
+    width: 80%;
+    margin: 100px auto;
+    font-family: Arial, sans-serif;
+}
 
 .axis .domain {
     display: none;

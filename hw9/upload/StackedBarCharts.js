@@ -136,7 +136,11 @@ function updateChart(data, track_genre) {
                         +d.criteria[1].name.replace("scores_","").replace("_"," ") + ": " + Math.round((d.criteria[1].y1 - d.criteria[1].y0)*1000)/1000 + '<br/>'
                         +d.criteria[2].name.replace("scores_","").replace("_"," ") + ": " + Math.round((d.criteria[2].y1 - d.criteria[2].y0)*1000)/1000 + '<br/>'
                         +d.criteria[3].name.replace("scores_","").replace("_"," ") + ": " + Math.round((d.criteria[3].y1 - d.criteria[3].y0)*1000)/1000 + '<br/>'
-                        +d.criteria[4].name.replace("scores_","").replace("_"," ") + ": " + Math.round((d.criteria[4].y1 - d.criteria[4].y0)*1000)/1000 )
+                        +d.criteria[4].name.replace("scores_","").replace("_"," ") + ": " + Math.round((d.criteria[4].y1 - d.criteria[4].y0)*1000)/1000 + '<br/>'
+                        +d.criteria[5].name.replace("scores_","").replace("_"," ") + ": " + Math.round((d.criteria[5].y1 - d.criteria[5].y0)*1000)/1000 + '<br/>'
+                        +d.criteria[6].name.replace("scores_","").replace("_"," ") + ": " + Math.round((d.criteria[6].y1 - d.criteria[6].y0)*1000)/1000 + '<br/>'
+                        +d.criteria[7].name.replace("scores_","").replace("_"," ") + ": " + Math.round((d.criteria[7].y1 - d.criteria[7].y0)*1000)/1000 + '<br/>'
+                        +d.criteria[8].name.replace("scores_","").replace("_"," ") + ": " + Math.round((d.criteria[8].y1 - d.criteria[8].y0)*1000)/1000 + '<br/>')
                 .style("height", "auto")
                 .style("width", "auto")
                 .style("left", (event.pageX + 5) + "px")     

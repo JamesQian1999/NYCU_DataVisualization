@@ -289,28 +289,3 @@ function getRandomHexColors(count, minDistance = 50) {
   }
   return Array.from(colors);
 }
-
-
-
-
-  // data['popularity']       = +data['popularity'];
-  // data['duration_ms']      = +data['duration_ms'];
-  // data['danceability']     = +data['danceability'];
-  // data['energy']           = +data['energy'];
-  // data['key']              = +data['key'];
-  // data['loudness']         = +data['loudness'];
-  // data['mode']             = +data['mode'];
-  // data['speechiness']      = +data['speechiness'];
-  // data['acousticness']     = +data['acousticness'];
-  // data['instrumentalness'] = +data['instrumentalness'];
-  // data['liveness']         = +data['liveness'];
-  // data['valence']          = +data['valence'];
-  // data['tempo']            = +data['tempo'];
-  // data['time_signature']   = +data['time_signature'];
-
-  // data['track_id']         = +data['track_id'];
-  // data['artists']          = +data['artists'];
-  // data['album_name']       = +data['album_name'];
-  // data['track_name']       = +data['track_name'];
-  // data['explicit']         = +data['explicit'];
-  // data['track_genre']      = +data['track_genre'];
