@@ -246,6 +246,7 @@ d3.csv('http://vis.lab.djosix.com:2023/data/ma_lga_12345.csv').then(function(dat
         d['cat']        = getCategory(d['type'], d['bedrooms']);
     });
 
+    console.log("data:",data);
     // console.log("data:",data);
 
     // remove duplicated items; 
